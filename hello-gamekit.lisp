@@ -70,17 +70,8 @@
 ;;; All the drawing should happend in this method
 ;;;
 (defmethod gamekit:draw ((app hello-gamekit))
-  (gamekit:draw-text "A snake that is!" (gamekit:vec2 300 400))
-  (gamekit:draw-curve (aref *curve* 0)
-                      (aref *curve* 3)
-                      (aref *curve* 1)
-                      (aref *curve* 2)
-                      *black*
-                      :thickness 5.0)
-  ;; let's center image position properly first
-  (let* ((half-width (/ (gamekit:image-width :snake-head) 2))
-         (half-height (/ (gamekit:image-height :snake-head) 2))
-         (head-image-position (gamekit:subt (aref *curve* 3)
-                                            (gamekit:vec2 half-width half-height))))
-    ;; then draw it where it belongs
-    (gamekit:draw-image head-image-position :snake-head)))
+  (let* ((xscale (/ (gamekit:viewport-width) (gamekit:image-width :snake-head)))
+         (yscale (/ (gamekit:viewport-height) (gamekit:image-height :snake-head))))
+    (cl-bodge.canvas:scale-canvas xscale yscale)
+    (gamekit:draw-image (gamekit:vec2 0 0) :snake-head)
+    ))
